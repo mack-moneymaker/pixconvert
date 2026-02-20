@@ -13,13 +13,16 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect rx='18' width='100' height='100' fill='%236366f1'/><text x='50' y='72' font-size='62' font-weight='bold' font-family='system-ui' text-anchor='middle' fill='white'>P</text></svg>">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#0f172a;--surface:#1e293b;--surface2:#334155;--accent:#6366f1;--accent-hover:#818cf8;--text:#f1f5f9;--text2:#94a3b8;--border:#334155;--radius:12px}
+:root{--bg:#0f172a;--surface:#1e293b;--surface2:#334155;--accent:#6366f1;--accent-hover:#818cf8;--text:#f1f5f9;--text2:#94a3b8;--border:#334155;--radius:12px;--gold:#f59e0b}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
 a{color:var(--accent);text-decoration:none}a:hover{color:var(--accent-hover)}
 header{text-align:center;padding:2.5rem 1rem 1.5rem}
 header h1{font-size:2rem;font-weight:700;letter-spacing:-.02em}
 header h1 span{color:var(--accent)}
 header p{color:var(--text2);margin-top:.4rem;font-size:.95rem}
+.header-actions{display:flex;justify-content:center;gap:.75rem;margin-top:1rem}
+.btn-star{display:inline-flex;align-items:center;gap:.4rem;padding:.45rem 1rem;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:.85rem;font-weight:600;cursor:pointer;transition:border-color .2s,background .2s;text-decoration:none}
+.btn-star:hover{border-color:var(--gold);background:rgba(245,158,11,.08);color:var(--gold)}
 main{flex:1;max-width:900px;width:100%;margin:0 auto;padding:0 1rem 3rem}
 .drop-zone{border:2px dashed var(--border);border-radius:var(--radius);padding:3rem 1.5rem;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;background:var(--surface);margin-bottom:1.5rem}
 .drop-zone:hover,.drop-zone.drag{border-color:var(--accent);background:rgba(99,102,241,.08)}
@@ -42,6 +45,7 @@ input[type=range]{width:100%;accent-color:var(--accent);margin-top:.25rem}
 .btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:var(--accent-hover)}
 .btn-secondary{background:var(--surface2);color:var(--text)}.btn-secondary:hover{background:#475569}
 .btn:disabled{opacity:.4;cursor:not-allowed}
+.btn-zip{background:#059669;color:#fff}.btn-zip:hover{background:#10b981}
 .file-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem}
 .file-card{background:var(--surface);border-radius:var(--radius);overflow:hidden;position:relative}
 .file-card img{width:100%;height:140px;object-fit:cover;display:block;background:var(--surface2)}
@@ -52,6 +56,32 @@ input[type=range]{width:100%;accent-color:var(--accent);margin-top:.25rem}
 .file-card .download-single{display:block;margin-top:.5rem;text-align:center;padding:.35rem;background:var(--accent);color:#fff;border-radius:6px;font-size:.78rem;font-weight:600;cursor:pointer;border:none;width:100%}
 .file-card .download-single:disabled{opacity:.4;cursor:not-allowed}
 .file-card.converted{border:1px solid var(--accent)}
+.batch-limit-msg{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);border-radius:var(--radius);padding:1rem 1.25rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:.75rem;font-size:.9rem}
+.batch-limit-msg .upgrade-link{color:var(--gold);font-weight:600;white-space:nowrap}
+/* Pricing */
+.pricing{max-width:900px;width:100%;margin:0 auto;padding:0 1rem 3rem}
+.pricing h2{text-align:center;font-size:1.5rem;font-weight:700;margin-bottom:.5rem}
+.pricing .subtitle{text-align:center;color:var(--text2);margin-bottom:2rem;font-size:.95rem}
+.pricing-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem}
+@media(max-width:640px){.pricing-grid{grid-template-columns:1fr}}
+.plan{background:var(--surface);border-radius:var(--radius);padding:2rem 1.5rem;position:relative}
+.plan.pro{border:2px solid var(--accent)}
+.plan-badge{position:absolute;top:-10px;right:16px;background:var(--accent);color:#fff;font-size:.7rem;font-weight:700;padding:.25rem .75rem;border-radius:20px;text-transform:uppercase;letter-spacing:.05em}
+.plan h3{font-size:1.2rem;font-weight:700;margin-bottom:.25rem}
+.plan .price{font-size:1.8rem;font-weight:700;margin-bottom:1rem}.plan .price span{font-size:.9rem;color:var(--text2);font-weight:400}
+.plan ul{list-style:none;margin-bottom:1.5rem}
+.plan ul li{padding:.35rem 0;font-size:.9rem;color:var(--text2)}
+.plan ul li::before{content:'✓ ';color:var(--accent);font-weight:700}
+.plan .btn{width:100%;text-align:center;display:block}
+/* FAQ */
+.faq{max-width:900px;width:100%;margin:0 auto;padding:0 1rem 3rem}
+.faq h2{text-align:center;font-size:1.5rem;font-weight:700;margin-bottom:1.5rem}
+.faq-item{background:var(--surface);border-radius:var(--radius);margin-bottom:.75rem;overflow:hidden}
+.faq-q{padding:1rem 1.25rem;cursor:pointer;font-weight:600;font-size:.95rem;display:flex;justify-content:space-between;align-items:center;user-select:none}
+.faq-q::after{content:'+';font-size:1.2rem;color:var(--text2);transition:transform .2s}
+.faq-item.open .faq-q::after{content:'−'}
+.faq-a{padding:0 1.25rem;max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s ease;color:var(--text2);font-size:.9rem;line-height:1.6}
+.faq-item.open .faq-a{max-height:200px;padding:0 1.25rem 1rem}
 footer{text-align:center;padding:2rem 1rem;color:var(--text2);font-size:.82rem;border-top:1px solid var(--border)}
 footer .tools{display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem 1.2rem;margin-bottom:.75rem}
 footer .tools a{color:var(--text2);font-weight:500;font-size:.8rem}footer .tools a:hover{color:var(--accent)}
@@ -62,13 +92,21 @@ footer .tools a{color:var(--text2);font-weight:500;font-size:.8rem}footer .tools
 <header>
 <h1><span>Pix</span>Convert</h1>
 <p>Convert images instantly. Free, private, no upload.</p>
+<div class="header-actions">
+<a href="https://github.com/mack-moneymaker/pixconvert" target="_blank" class="btn-star">⭐ Star on GitHub</a>
+</div>
 </header>
 <main>
 <div class="drop-zone" id="dropZone">
 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 16V4m0 0L8 8m4-4 4 4M4 17v2a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-2"/></svg>
 <p><strong>Drop images here</strong> or click to browse</p>
-<p style="font-size:.8rem;margin-top:.3rem">PNG, JPG, WEBP, GIF, BMP — multiple files supported</p>
+<p style="font-size:.8rem;margin-top:.3rem">PNG, JPG, WEBP, GIF, BMP — up to 10 files free</p>
 <input type="file" id="fileInput" accept="image/*" multiple hidden>
+</div>
+
+<div id="batchLimitMsg" class="batch-limit-msg hidden">
+<span>⚠️ Free tier is limited to 10 images per batch. Extra files were skipped.</span>
+<a href="https://buy.stripe.com/pixconvert-pro" target="_blank" class="upgrade-link">Upgrade to Pro →</a>
 </div>
 
 <div class="controls">
@@ -99,11 +137,66 @@ footer .tools a{color:var(--text2);font-weight:500;font-size:.8rem}footer .tools
 
 <div class="actions">
 <button class="btn btn-primary" id="convertBtn" disabled>Convert All</button>
+<button class="btn btn-zip" id="zipBtn" disabled>📦 Download All as ZIP</button>
 <button class="btn btn-secondary" id="clearBtn" disabled>Clear All</button>
 </div>
 
 <div class="file-list" id="fileList"></div>
 </main>
+
+<!-- Pricing -->
+<section class="pricing">
+<h2>Simple Pricing</h2>
+<p class="subtitle">Free forever for most users. Pro for power users.</p>
+<div class="pricing-grid">
+<div class="plan">
+<h3>Free</h3>
+<div class="price">$0<span>/forever</span></div>
+<ul>
+<li>Convert up to 10 images at once</li>
+<li>All output formats (PNG, JPG, WEBP, GIF, BMP, ICO)</li>
+<li>Resize & quality controls</li>
+<li>Download individually or as ZIP</li>
+<li>100% private — nothing uploaded</li>
+</ul>
+<button class="btn btn-secondary" style="width:100%" disabled>Current Plan</button>
+</div>
+<div class="plan pro">
+<div class="plan-badge">Popular</div>
+<h3>Pro</h3>
+<div class="price">$3<span>/month</span></div>
+<ul>
+<li>Unlimited batch conversion</li>
+<li>HEIC/HEIF input support</li>
+<li>No branding</li>
+<li>Priority updates & features</li>
+<li>Support indie development ❤️</li>
+</ul>
+<a href="https://buy.stripe.com/pixconvert-pro" target="_blank" class="btn btn-primary" style="width:100%;text-align:center;display:block;padding:.65rem 1.5rem">Get Pro →</a>
+</div>
+</div>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+<h2>Frequently Asked Questions</h2>
+<div class="faq-item">
+<div class="faq-q">Is it really free?</div>
+<div class="faq-a">Yes! PixConvert is free for up to 10 images per batch. Everything runs in your browser — there are no servers to pay for. Pro is optional for power users who need unlimited batch sizes and extra features.</div>
+</div>
+<div class="faq-item">
+<div class="faq-q">Are my images uploaded anywhere?</div>
+<div class="faq-a">Never. All conversion happens locally in your browser using the Canvas API. Your images never leave your device. There's no server, no tracking, no analytics. Check the source code yourself — it's open source.</div>
+</div>
+<div class="faq-item">
+<div class="faq-q">What formats are supported?</div>
+<div class="faq-a">Input: PNG, JPG, WEBP, GIF, BMP (and HEIC with Pro). Output: PNG, JPG, WEBP, GIF, BMP, and ICO (64×64). You can also resize images during conversion.</div>
+</div>
+<div class="faq-item">
+<div class="faq-q">How does Pro work?</div>
+<div class="faq-a">Pro unlocks unlimited batch conversion, HEIC input support, and removes branding. After subscribing via Stripe, you'll receive a license key to activate Pro features. You can cancel anytime.</div>
+</div>
+</section>
 
 <footer>
 <div class="tools">
@@ -120,12 +213,14 @@ footer .tools a{color:var(--text2);font-weight:500;font-size:.8rem}footer .tools
 
 <script>
 const $ = s => document.querySelector(s);
+const FREE_LIMIT = 10;
 const dropZone = $('#dropZone'), fileInput = $('#fileInput'), fileList = $('#fileList');
 const formatSel = $('#format'), qualitySlider = $('#quality'), qualityVal = $('#qualityVal');
 const qualityGroup = $('#qualityGroup'), resizeW = $('#resizeW'), resizeH = $('#resizeH');
-const convertBtn = $('#convertBtn'), clearBtn = $('#clearBtn');
+const convertBtn = $('#convertBtn'), clearBtn = $('#clearBtn'), zipBtn = $('#zipBtn');
+const batchLimitMsg = $('#batchLimitMsg');
 
-let files = []; // {id, file, img, converted, blob}
+let files = [];
 
 // Quality visibility
 function updateQualityVis() {
@@ -137,9 +232,8 @@ qualitySlider.addEventListener('input', () => qualityVal.textContent = qualitySl
 updateQualityVis();
 
 // Aspect ratio linking
-let arLock = true;
 resizeW.addEventListener('input', () => {
-  if (!arLock || files.length === 0) return;
+  if (files.length === 0) return;
   const first = files[0];
   if (first.img && resizeW.value) {
     const ratio = first.img.naturalHeight / first.img.naturalWidth;
@@ -147,7 +241,7 @@ resizeW.addEventListener('input', () => {
   } else resizeH.value = '';
 });
 resizeH.addEventListener('input', () => {
-  if (!arLock || files.length === 0) return;
+  if (files.length === 0) return;
   const first = files[0];
   if (first.img && resizeH.value) {
     const ratio = first.img.naturalWidth / first.img.naturalHeight;
@@ -163,8 +257,10 @@ dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.classList.
 fileInput.addEventListener('change', () => { addFiles(fileInput.files); fileInput.value = ''; });
 
 function addFiles(fl) {
+  let skipped = false;
   for (const f of fl) {
     if (!f.type.startsWith('image/')) continue;
+    if (files.length >= FREE_LIMIT) { skipped = true; continue; }
     const id = Date.now() + '-' + Math.random().toString(36).slice(2, 8);
     const entry = { id, file: f, img: null, converted: false, blob: null };
     files.push(entry);
@@ -172,6 +268,7 @@ function addFiles(fl) {
     img.onload = () => { entry.img = img; renderCard(entry); };
     img.src = URL.createObjectURL(f);
   }
+  batchLimitMsg.classList.toggle('hidden', !skipped);
   updateButtons();
 }
 
@@ -205,8 +302,11 @@ function formatSize(b) {
 }
 
 function updateButtons() {
-  convertBtn.disabled = files.length === 0;
-  clearBtn.disabled = files.length === 0;
+  const hasFiles = files.length > 0;
+  const hasConverted = files.some(f => f.converted);
+  convertBtn.disabled = !hasFiles;
+  clearBtn.disabled = !hasFiles;
+  zipBtn.disabled = !hasConverted;
 }
 
 // Delegated events
@@ -221,12 +321,14 @@ function removeFile(id) {
   files = files.filter(f => f.id !== id);
   const card = document.getElementById('card-' + id);
   if (card) card.remove();
+  if (files.length < FREE_LIMIT) batchLimitMsg.classList.add('hidden');
   updateButtons();
 }
 
 clearBtn.addEventListener('click', () => {
   files = [];
   fileList.innerHTML = '';
+  batchLimitMsg.classList.add('hidden');
   updateButtons();
 });
 
@@ -246,18 +348,15 @@ convertBtn.addEventListener('click', async () => {
     if (w && h) { cw = w; ch = h; }
     else if (w) { ch = Math.round(ch * (w / cw)); cw = w; }
     else if (h) { cw = Math.round(cw * (h / ch)); ch = h; }
-
     if (fmt === 'x-icon') { cw = 64; ch = 64; }
 
     canvas.width = cw; canvas.height = ch;
     const ctx = canvas.getContext('2d');
-    // White background for JPEG (no alpha)
     if (fmt === 'jpeg') { ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, cw, ch); }
     ctx.drawImage(entry.img, 0, 0, cw, ch);
 
     const mime = fmt === 'x-icon' ? 'image/png' : `image/${fmt}`;
     const useQ = (fmt === 'jpeg' || fmt === 'webp') ? q : undefined;
-
     entry.blob = await new Promise(r => canvas.toBlob(r, mime, useQ));
     entry.converted = true;
     renderCard(entry);
@@ -277,6 +376,48 @@ function downloadFile(id) {
   a.download = `${base}.${ext}`;
   a.click();
 }
+
+// Download All as ZIP (using JSZip from CDN)
+zipBtn.addEventListener('click', async () => {
+  const converted = files.filter(f => f.converted && f.blob);
+  if (converted.length === 0) return;
+
+  zipBtn.disabled = true;
+  zipBtn.textContent = '📦 Zipping…';
+
+  // Lazy-load JSZip
+  if (!window.JSZip) {
+    await new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/jszip@3/dist/jszip.min.js';
+      s.onload = resolve; s.onerror = reject;
+      document.head.appendChild(s);
+    });
+  }
+
+  const zip = new JSZip();
+  const fmt = formatSel.value;
+  const ext = fmt === 'jpeg' ? 'jpg' : fmt === 'x-icon' ? 'ico' : fmt;
+
+  for (const entry of converted) {
+    const base = entry.file.name.replace(/\.[^.]+$/, '');
+    zip.file(`${base}.${ext}`, entry.blob);
+  }
+
+  const content = await zip.generateAsync({ type: 'blob' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(content);
+  a.download = `pixconvert-${converted.length}files.zip`;
+  a.click();
+
+  zipBtn.textContent = '📦 Download All as ZIP';
+  updateButtons();
+});
+
+// FAQ toggle
+document.querySelectorAll('.faq-q').forEach(q => {
+  q.addEventListener('click', () => q.parentElement.classList.toggle('open'));
+});
 </script>
 </body>
 </html>
