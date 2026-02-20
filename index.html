@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PixConvert — Convert images instantly. Free, private, no upload.</title>
+<meta name="description" content="Convert images between PNG, JPG, WEBP, GIF, BMP and ICO instantly in your browser. Free, private, no server upload. Batch support included.">
+<meta property="og:title" content="PixConvert — Image Format Converter">
+<meta property="og:description" content="Convert images instantly. Free, private, no upload. Supports PNG, JPG, WEBP, GIF, BMP, ICO.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://pixconvert.pages.dev">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect rx='18' width='100' height='100' fill='%236366f1'/><text x='50' y='72' font-size='62' font-weight='bold' font-family='system-ui' text-anchor='middle' fill='white'>P</text></svg>">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0f172a;--surface:#1e293b;--surface2:#334155;--accent:#6366f1;--accent-hover:#818cf8;--text:#f1f5f9;--text2:#94a3b8;--border:#334155;--radius:12px}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column}
+a{color:var(--accent);text-decoration:none}a:hover{color:var(--accent-hover)}
+header{text-align:center;padding:2.5rem 1rem 1.5rem}
+header h1{font-size:2rem;font-weight:700;letter-spacing:-.02em}
+header h1 span{color:var(--accent)}
+header p{color:var(--text2);margin-top:.4rem;font-size:.95rem}
+main{flex:1;max-width:900px;width:100%;margin:0 auto;padding:0 1rem 3rem}
+.drop-zone{border:2px dashed var(--border);border-radius:var(--radius);padding:3rem 1.5rem;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;background:var(--surface);margin-bottom:1.5rem}
+.drop-zone:hover,.drop-zone.drag{border-color:var(--accent);background:rgba(99,102,241,.08)}
+.drop-zone svg{width:48px;height:48px;color:var(--text2);margin-bottom:.75rem}
+.drop-zone p{color:var(--text2);font-size:.95rem}
+.drop-zone p strong{color:var(--text)}
+.controls{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+@media(max-width:640px){.controls{grid-template-columns:1fr}}
+.control-group{background:var(--surface);border-radius:var(--radius);padding:1rem}
+.control-group label{display:block;font-size:.8rem;color:var(--text2);margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+select,input[type=number]{width:100%;padding:.5rem .75rem;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.9rem;outline:none}
+select:focus,input:focus{border-color:var(--accent)}
+input[type=range]{width:100%;accent-color:var(--accent);margin-top:.25rem}
+.quality-val{float:right;font-size:.85rem;color:var(--accent);font-weight:600}
+.resize-row{display:flex;gap:.5rem;align-items:center}
+.resize-row input{flex:1}
+.resize-row span{color:var(--text2);font-size:.85rem}
+.actions{display:flex;gap:1rem;margin-bottom:1.5rem;flex-wrap:wrap}
+.btn{padding:.65rem 1.5rem;border-radius:8px;border:none;font-size:.9rem;font-weight:600;cursor:pointer;transition:background .2s,opacity .2s}
+.btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:var(--accent-hover)}
+.btn-secondary{background:var(--surface2);color:var(--text)}.btn-secondary:hover{background:#475569}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.file-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem}
+.file-card{background:var(--surface);border-radius:var(--radius);overflow:hidden;position:relative}
+.file-card img{width:100%;height:140px;object-fit:cover;display:block;background:var(--surface2)}
+.file-card .info{padding:.75rem}
+.file-card .name{font-size:.8rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:.35rem}
+.file-card .meta{font-size:.75rem;color:var(--text2)}
+.file-card .remove{position:absolute;top:6px;right:6px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.6);border:none;color:#fff;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
+.file-card .download-single{display:block;margin-top:.5rem;text-align:center;padding:.35rem;background:var(--accent);color:#fff;border-radius:6px;font-size:.78rem;font-weight:600;cursor:pointer;border:none;width:100%}
+.file-card .download-single:disabled{opacity:.4;cursor:not-allowed}
+.file-card.converted{border:1px solid var(--accent)}
+footer{text-align:center;padding:2rem 1rem;color:var(--text2);font-size:.82rem;border-top:1px solid var(--border)}
+footer .tools{display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem 1.2rem;margin-bottom:.75rem}
+footer .tools a{color:var(--text2);font-weight:500;font-size:.8rem}footer .tools a:hover{color:var(--accent)}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<header>
+<h1><span>Pix</span>Convert</h1>
+<p>Convert images instantly. Free, private, no upload.</p>
+</header>
+<main>
+<div class="drop-zone" id="dropZone">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 16V4m0 0L8 8m4-4 4 4M4 17v2a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-2"/></svg>
+<p><strong>Drop images here</strong> or click to browse</p>
+<p style="font-size:.8rem;margin-top:.3rem">PNG, JPG, WEBP, GIF, BMP — multiple files supported</p>
+<input type="file" id="fileInput" accept="image/*" multiple hidden>
+</div>
+
+<div class="controls">
+<div class="control-group">
+<label>Output Format</label>
+<select id="format">
+<option value="png">PNG</option>
+<option value="jpeg">JPG</option>
+<option value="webp" selected>WEBP</option>
+<option value="gif">GIF</option>
+<option value="bmp">BMP</option>
+<option value="x-icon">ICO (64×64)</option>
+</select>
+</div>
+<div class="control-group" id="qualityGroup">
+<label>Quality <span class="quality-val" id="qualityVal">92%</span></label>
+<input type="range" id="quality" min="1" max="100" value="92">
+</div>
+<div class="control-group">
+<label>Resize (optional)</label>
+<div class="resize-row">
+<input type="number" id="resizeW" placeholder="Width" min="1">
+<span>×</span>
+<input type="number" id="resizeH" placeholder="Height" min="1">
+</div>
+</div>
+</div>
+
+<div class="actions">
+<button class="btn btn-primary" id="convertBtn" disabled>Convert All</button>
+<button class="btn btn-secondary" id="clearBtn" disabled>Clear All</button>
+</div>
+
+<div class="file-list" id="fileList"></div>
+</main>
+
+<footer>
+<div class="tools">
+<a href="https://faviconify.pages.dev">Faviconify</a>
+<a href="https://sigcraft.pages.dev">SigCraft</a>
+<a href="https://gradientlab.pages.dev">GradientLab</a>
+<a href="https://colorcraft.pages.dev">ColorCraft</a>
+<a href="https://jsonpretty.pages.dev">JSONPretty</a>
+<a href="https://cronmaker.pages.dev">CronMaker</a>
+<a href="https://regexlab.pages.dev">RegexLab</a>
+</div>
+<p>Made with ❤️ · 100% client-side · Your images never leave your device</p>
+</footer>
+
+<script>
+const $ = s => document.querySelector(s);
+const dropZone = $('#dropZone'), fileInput = $('#fileInput'), fileList = $('#fileList');
+const formatSel = $('#format'), qualitySlider = $('#quality'), qualityVal = $('#qualityVal');
+const qualityGroup = $('#qualityGroup'), resizeW = $('#resizeW'), resizeH = $('#resizeH');
+const convertBtn = $('#convertBtn'), clearBtn = $('#clearBtn');
+
+let files = []; // {id, file, img, converted, blob}
+
+// Quality visibility
+function updateQualityVis() {
+  const f = formatSel.value;
+  qualityGroup.style.opacity = (f === 'jpeg' || f === 'webp') ? '1' : '.4';
+}
+formatSel.addEventListener('change', updateQualityVis);
+qualitySlider.addEventListener('input', () => qualityVal.textContent = qualitySlider.value + '%');
+updateQualityVis();
+
+// Aspect ratio linking
+let arLock = true;
+resizeW.addEventListener('input', () => {
+  if (!arLock || files.length === 0) return;
+  const first = files[0];
+  if (first.img && resizeW.value) {
+    const ratio = first.img.naturalHeight / first.img.naturalWidth;
+    resizeH.value = Math.round(resizeW.value * ratio);
+  } else resizeH.value = '';
+});
+resizeH.addEventListener('input', () => {
+  if (!arLock || files.length === 0) return;
+  const first = files[0];
+  if (first.img && resizeH.value) {
+    const ratio = first.img.naturalWidth / first.img.naturalHeight;
+    resizeW.value = Math.round(resizeH.value * ratio);
+  } else resizeW.value = '';
+});
+
+// Drop zone
+dropZone.addEventListener('click', () => fileInput.click());
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag'));
+dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.classList.remove('drag'); addFiles(e.dataTransfer.files); });
+fileInput.addEventListener('change', () => { addFiles(fileInput.files); fileInput.value = ''; });
+
+function addFiles(fl) {
+  for (const f of fl) {
+    if (!f.type.startsWith('image/')) continue;
+    const id = Date.now() + '-' + Math.random().toString(36).slice(2, 8);
+    const entry = { id, file: f, img: null, converted: false, blob: null };
+    files.push(entry);
+    const img = new Image();
+    img.onload = () => { entry.img = img; renderCard(entry); };
+    img.src = URL.createObjectURL(f);
+  }
+  updateButtons();
+}
+
+function renderCard(entry) {
+  let card = document.getElementById('card-' + entry.id);
+  if (!card) {
+    card = document.createElement('div');
+    card.className = 'file-card';
+    card.id = 'card-' + entry.id;
+    fileList.appendChild(card);
+  }
+  if (entry.converted) card.classList.add('converted');
+  else card.classList.remove('converted');
+  const ext = formatSel.value === 'jpeg' ? 'jpg' : formatSel.value === 'x-icon' ? 'ico' : formatSel.value;
+  const sizeStr = entry.blob ? formatSize(entry.blob.size) : formatSize(entry.file.size);
+  const dims = entry.img ? `${entry.img.naturalWidth}×${entry.img.naturalHeight}` : '';
+  card.innerHTML = `
+    <img src="${entry.converted && entry.blob ? URL.createObjectURL(entry.blob) : entry.img.src}" alt="">
+    <button class="remove" data-id="${entry.id}">×</button>
+    <div class="info">
+      <div class="name">${entry.file.name}</div>
+      <div class="meta">${dims} · ${sizeStr}${entry.converted ? ' · ✓ Converted' : ''}</div>
+      <button class="download-single" data-id="${entry.id}" ${entry.converted ? '' : 'disabled'}>Download .${ext}</button>
+    </div>`;
+}
+
+function formatSize(b) {
+  if (b < 1024) return b + ' B';
+  if (b < 1048576) return (b / 1024).toFixed(1) + ' KB';
+  return (b / 1048576).toFixed(1) + ' MB';
+}
+
+function updateButtons() {
+  convertBtn.disabled = files.length === 0;
+  clearBtn.disabled = files.length === 0;
+}
+
+// Delegated events
+fileList.addEventListener('click', e => {
+  const rm = e.target.closest('.remove');
+  if (rm) { removeFile(rm.dataset.id); return; }
+  const dl = e.target.closest('.download-single');
+  if (dl && !dl.disabled) downloadFile(dl.dataset.id);
+});
+
+function removeFile(id) {
+  files = files.filter(f => f.id !== id);
+  const card = document.getElementById('card-' + id);
+  if (card) card.remove();
+  updateButtons();
+}
+
+clearBtn.addEventListener('click', () => {
+  files = [];
+  fileList.innerHTML = '';
+  updateButtons();
+});
+
+// Convert
+convertBtn.addEventListener('click', async () => {
+  convertBtn.disabled = true;
+  convertBtn.textContent = 'Converting…';
+  const fmt = formatSel.value;
+  const q = qualitySlider.value / 100;
+  const w = resizeW.value ? parseInt(resizeW.value) : 0;
+  const h = resizeH.value ? parseInt(resizeH.value) : 0;
+
+  for (const entry of files) {
+    if (!entry.img) continue;
+    const canvas = document.createElement('canvas');
+    let cw = entry.img.naturalWidth, ch = entry.img.naturalHeight;
+    if (w && h) { cw = w; ch = h; }
+    else if (w) { ch = Math.round(ch * (w / cw)); cw = w; }
+    else if (h) { cw = Math.round(cw * (h / ch)); ch = h; }
+
+    if (fmt === 'x-icon') { cw = 64; ch = 64; }
+
+    canvas.width = cw; canvas.height = ch;
+    const ctx = canvas.getContext('2d');
+    // White background for JPEG (no alpha)
+    if (fmt === 'jpeg') { ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, cw, ch); }
+    ctx.drawImage(entry.img, 0, 0, cw, ch);
+
+    const mime = fmt === 'x-icon' ? 'image/png' : `image/${fmt}`;
+    const useQ = (fmt === 'jpeg' || fmt === 'webp') ? q : undefined;
+
+    entry.blob = await new Promise(r => canvas.toBlob(r, mime, useQ));
+    entry.converted = true;
+    renderCard(entry);
+  }
+  convertBtn.textContent = 'Convert All';
+  updateButtons();
+});
+
+function downloadFile(id) {
+  const entry = files.find(f => f.id === id);
+  if (!entry || !entry.blob) return;
+  const fmt = formatSel.value;
+  const ext = fmt === 'jpeg' ? 'jpg' : fmt === 'x-icon' ? 'ico' : fmt;
+  const base = entry.file.name.replace(/\.[^.]+$/, '');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(entry.blob);
+  a.download = `${base}.${ext}`;
+  a.click();
+}
+</script>
+</body>
+</html>
